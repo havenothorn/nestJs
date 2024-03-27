@@ -1,17 +1,13 @@
 import * as express from "express";
+import { Cat, CatType } from "./app.model";
 
 const app: express.Express = express();
 
-const port: number = 8000;
-
 app.get("/", (req: express.Request, res: express.Response) => {
-  res.send({ name: "nami", age: 999, friends: ["ss", "ys", "ye"] });
+  console.log(req);
+  res.send({ cats: Cat });
 });
 
-app.post("/", (req: express.Request, res: express.Response) => {
-  res.send({ name: "frank" });
-});
-
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}/`);
+app.listen(8000, () => {
+  console.log("Server is running on port 8000");
 });
