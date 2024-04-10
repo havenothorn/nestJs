@@ -1,8 +1,9 @@
 import * as express from "express";
-import { Cat, CatType } from "./app.model";
+import catsRouter from "./cats/cats.route";
 
 const app: express.Express = express();
 
+// logging middleware
 app.use(
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     console.log(req.rawHeaders[1]);
@@ -11,24 +12,19 @@ app.use(
   }
 );
 
-app.get("/", (req: express.Request, res: express.Response) => {
-  res.send({ cats: Cat });
-});
+// json middleware
+app.use(express.json());
 
-app.get("/cats/blue", (req: express.Request, res: express.Response) => {
-  res.send({ blue: Cat[0] });
-});
+// cats router
+app.use(catsRouter);
 
-app.get("/cats/som", (req: express.Request, res: express.Response) => {
-  res.send({ som: Cat[1] });
-});
-
-app.listen(8000, () => {
-  console.log("Server is running on port 8000");
-});
-
+// 404 middleware
 app.use(
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     res.send({ error: "404 Not Found" });
   }
 );
+
+app.listen(8000, () => {
+  console.log("Server is running on port 8000");
+});
