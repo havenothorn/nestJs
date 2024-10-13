@@ -1,30 +1,57 @@
 import * as express from "express";
 import catsRouter from "./cats/cats.route";
 
-const app: express.Express = express();
+class Server {
+  public app: express.Application;
 
-// logging middleware
-app.use(
-  (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    console.log(req.rawHeaders[1]);
-    console.log("this is a logging middleware function. :)");
-    next();
+  constructor() {
+    const app: express.Application = express();
+    this.app = app;
   }
-);
 
-// json middleware
-app.use(express.json());
-
-// cats router
-app.use(catsRouter);
-
-// 404 middleware
-app.use(
-  (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    res.send({ error: "404 Not Found" });
+  private setRoute() {
+    this.app.use(catsRouter);
   }
-);
 
-app.listen(8000, () => {
-  console.log("Server is running on port 8000");
-});
+  private setMiddleware() {
+    this.app.use(
+      (
+        req: express.Request,
+        res: express.Response,
+        next: express.NextFunction
+      ) => {
+        console.log(req.rawHeaders[1]);
+        console.log("this is a logging middleware function. :)");
+        next();
+      }
+    );
+
+    this.app.use(express.json());
+
+    this.setRoute();
+
+    this.app.use(
+      (
+        req: express.Request,
+        res: express.Response,
+        next: express.NextFunction
+      ) => {
+        res.send({ error: "404 Not Found" });
+      }
+    );
+  }
+
+  public listen() {
+    this.setMiddleware();
+    this.app.listen(8000, () => {
+      console.log("Server is running on port 8000");
+    });
+  }
+}
+
+function init() {
+  const server = new Server();
+  server.listen();
+}
+
+init();
