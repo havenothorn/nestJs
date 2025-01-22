@@ -9,23 +9,26 @@ import {
   Post,
   Put,
   UseFilters,
+  UseInterceptors,
 } from '@nestjs/common';
 import { CatsService } from './cats.service';
-import { HttpExceptionFilter } from 'src/http-exception.filter';
+import { HttpExceptionFilter } from 'src/common/exceptions/http-exception.filter';
+import { PositiveIntPipe } from 'src/common/pipes/positiveInt.pipe';
+import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
 
 @Controller('cats')
+@UseInterceptors(SuccessInterceptor)
+@UseFilters(HttpExceptionFilter)
 export class CatsController {
   constructor(private readonly catsService: CatsService) {}
 
   @Get()
-  @UseFilters(HttpExceptionFilter)
   getAllCat() {
-    throw new HttpException('Forbidden', 403);
+    return { cats: 'All cats' };
   }
 
   @Get(':id')
   getOneCat(@Param('id', ParseIntPipe) param) {
-    console.log(param);
     return 'One cat';
   }
 
