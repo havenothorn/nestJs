@@ -8,6 +8,23 @@ import { Cat } from '../cats.schema';
 export class CatsService {
   constructor(private readonly catsRepository: CatsRepository) {}
 
+  async getAllCat() {
+    const allCat = await this.catsRepository.findAll();
+    const readOnlyCats = allCat.map((cat) => cat.readOnlyData);
+    return readOnlyCats;
+  }
+
+  async uploadImg(cat: Cat, files: Array<Express.Multer.File>) {
+    const fileName = `cats/${files[0].filename}`;
+    console.log(fileName);
+    const newCat = await this.catsRepository.findByIdAndUpdateImg(
+      cat.id,
+      fileName,
+    );
+    console.log(newCat);
+    return newCat;
+  }
+
   async signUp(body: CatsRequestDto) {
     const { email, name, password } = body;
     const isCatExist = await this.catsRepository.existsByEmail(email);
@@ -25,16 +42,5 @@ export class CatsService {
     });
 
     return cat.readOnlyData;
-  }
-
-  async uploadImg(cat: Cat, files: Array<Express.Multer.File>) {
-    const fileName = `cats/${files[0].filename}`;
-    console.log(fileName);
-    const newCat = await this.catsRepository.findByIdAndUpdateImg(
-      cat.id,
-      fileName,
-    );
-    console.log(newCat);
-    return newCat;
   }
 }

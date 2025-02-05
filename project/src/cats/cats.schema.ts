@@ -48,7 +48,7 @@ export class Cat extends Document {
 
   @Prop({
     default:
-      'https://www.google.com/url?sa=i&url=https%3A%2F%2Fsellercenter.interpark.com%2Fopenlab4%2F%3Fbmode%3Dview%26idx%3D11247298&psig=AOvVaw2WpSg0FUj3nym8lLjz-6Y7&ust=1738745604733000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCLD5tqLSqYsDFQAAAAAdAAAAABAE',
+      'https://upload.wikimedia.org/wikipedia/commons/0/0a/No-image-available.png',
   })
   @IsString()
   imgUrl: string;
