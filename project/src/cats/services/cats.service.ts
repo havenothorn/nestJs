@@ -1,5 +1,5 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { CatsRequestDto } from '../dto/cats.request.dto';
+import { CatsRequestDto } from '../dtos/cats.request.dto';
 import * as bcrypt from 'bcrypt';
 import { CatsRepository } from '../cats.repository';
 import { Cat } from '../cats.schema';

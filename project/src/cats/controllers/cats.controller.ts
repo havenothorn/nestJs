@@ -1,15 +1,8 @@
 import {
   Body,
   Controller,
-  Delete,
   Get,
-  HttpException,
-  Param,
-  ParseIntPipe,
-  Patch,
   Post,
-  Put,
-  Req,
   UploadedFiles,
   UseFilters,
   UseGuards,
@@ -18,9 +11,9 @@ import {
 import { CatsService } from '../services/cats.service';
 import { HttpExceptionFilter } from 'src/common/exceptions/http-exception.filter';
 import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
-import { CatsRequestDto } from '../dto/cats.request.dto';
+import { CatsRequestDto } from '../dtos/cats.request.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { ReadOnlyCatDto } from '../dto/cat.dto';
+import { ReadOnlyCatDto } from '../dtos/cat.dto';
 import { AuthService } from 'src/auth/auth.service';
 import { LoginRequestDto } from 'src/auth/dto/login.request.dto';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
