@@ -5,6 +5,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 const options: SchemaOptions = {
   timestamps: true,
+  collection: 'comments',
 };
 
 @Schema(options)
@@ -53,7 +54,6 @@ export class Comments extends Document {
   })
   @IsNotEmpty()
   info: Types.ObjectId;
-
 }
 
 export const CommentsSchema = SchemaFactory.createForClass(Comments);

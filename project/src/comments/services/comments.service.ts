@@ -1,17 +1,48 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CommentsCreateDto } from '../dtos/comments.create.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { CatsRepository } from 'src/cats/cats.repository';
+import { Comments } from '../comments.schema';
 
 @Injectable()
 export class CommentsService {
+  constructor(
+    @InjectModel(Comments.name) private readonly commentsModel: Model<Comments>,
+    private readonly catsRepository: CatsRepository,
+  ) {}
   async getAllComments() {
-    return '모든 댓글을 조회합니다.';
+    try {
+      const comments = await this.commentsModel.find();
+      return comments;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
-  async createComment(id: string, comments: CommentsCreateDto) {
-    return '댓글을 생성합니다.';
+  async createComment(id: string, commentData: CommentsCreateDto) {
+    try {
+      const targetCat =
+        await this.catsRepository.findCatByIdWithoutPassword(id);
+      const { contents, author } = commentData;
+      const validAuthor =
+        await this.catsRepository.findCatByIdWithoutPassword(author); // 댓글 작성자 존재 여부 확인
+      const newComment = await new this.commentsModel({
+        author: validAuthor._id,
+        contents,
+        info: targetCat._id,
+      });
+      return await newComment.save();
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
   async plusLike(id: string) {
-    return '좋아요를 올립니다.';
+    try {
+      const comment = await this.commentsModel.findById(id);
+      comment.likeCounts += 1;
+      return await comment.save();
+    } catch (error) {}
   }
 }
